@@ -20,18 +20,18 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-        WebSocketMessageBrokerConfigurer.super.configureMessageBroker(registry);
-        registry.enableSimpleBroker("/user");
+        registry.enableSimpleBroker("/queue", "/topic");  // Puedes configurar el broker según lo que necesites
         registry.setApplicationDestinationPrefixes("/app");
-        registry.setUserDestinationPrefix("/user");
     }
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        WebSocketMessageBrokerConfigurer.super.registerStompEndpoints(registry);
-        registry.addEndpoint("/ws").withSockJS();
+        registry.addEndpoint("/ws")
+                .setAllowedOrigins("http://localhost:3000") // Cambia esto por los dominios permitidos
+                .withSockJS();
 
     }
+
 
     @Override
     public boolean configureMessageConverters(List<MessageConverter> messageConverters) {
@@ -43,4 +43,5 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         messageConverters.add(converter);
         return false;
     }
+
 }
